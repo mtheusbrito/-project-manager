@@ -1,4 +1,4 @@
-'use strict'
+"use strict";
 
 /*
 |--------------------------------------------------------------------------
@@ -14,15 +14,17 @@
 */
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
-const Route = use('Route')
+const Route = use("Route");
 
-Route.get('/', () => {
-  return { greeting: 'Hello world in JSON' }
-})
-Route.post('sessions', 'SessionController.store')
+Route.get("/", () => {
+  return { greeting: "Hello world in JSON" };
+});
+Route.post("sessions", "SessionController.store");
 
+Route.group(() => {
+  Route.resource("teams", "TeamController").apiOnly();
+}).middleware("auth");
 
-
-Route.group(()=> {
-  Route.resource('teams', 'TeamController').apiOnly()
-}).middleware('auth');
+Route.group(() => {
+  Route.post("invites", "InviteController.store");
+}).middleware(["auth", "team"]);
